@@ -1,0 +1,24 @@
+name: Deploy Node App to Local Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Restart app using PM2
+        run: |
+          pm2 restart node-app || pm2 start server.js --name node-app
+
+      - name: Save PM2 process
+        run: pm2 save
